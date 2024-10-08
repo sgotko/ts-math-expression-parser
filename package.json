@@ -1,5 +1,5 @@
 {
-  "name": "ts-math-expression-parser",
+  "name": "@sgotko/ts-math-expression-parser",
   "version": "1.0.0",
   "type": "module",
   "author": {
@@ -7,7 +7,10 @@
     "email": "gotko1996@gmail.com",
     "url": "https://github.com/sgotko"
   },
-  "repository": "github:sgotko/ts-math-expression-parser",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/sgotko/ts-math-expression-parser.git"
+  },
   "license": "GPL-3.0-only",
   "homepage": "https://github.com/sgotko/ts-math-expression-parser.git",
   "devDependencies": {
@@ -28,5 +31,8 @@
   "files": [
     "dist",
     "src"
-  ]
+  ],
+  "publishConfig": {
+    "registry": ""
+  }
 }

@@ -23,5 +23,9 @@
     "prebuild": "npm run clean",
     "build": "tsc -p build.tsconfig.json",
     "test": "mocha --no-warnings=ExperimentalWarning"
-  }
+  },
+  "files": [
+    "dist",
+    "src"
+  ]
 }

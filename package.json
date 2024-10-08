@@ -1,4 +1,5 @@
 {
+  "name": "ts-math-expression-parser",
   "version": "1.0.0",
   "type": "module",
   "author": {

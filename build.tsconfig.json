@@ -7,7 +7,9 @@
     "declaration": true,
     "outDir": "dist",
     "sourceMap": true,
-    "rootDir": "src"
+    "rootDir": "src",
+    "strict": true,
+    "strictNullChecks": true
   },
   "include": ["src/**/*.ts"]
 }

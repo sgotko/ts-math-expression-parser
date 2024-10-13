@@ -1,8 +1,10 @@
+import { isNull, isNumericChar } from './utils.js';
+
 interface IExpression {
   eval(): number;
 }
 
-class NumberNode implements IExpression {
+class NumberExpression implements IExpression {
   constructor(private value: number) {}
 
   eval(): number {
@@ -10,10 +12,10 @@ class NumberNode implements IExpression {
   }
 }
 
-class BinaryOperationNode implements IExpression {
+class BinaryExpression implements IExpression {
   constructor(
     private left: IExpression,
-    private operator: string,
+    private operation: string,
     private right: IExpression
   ) {}
 
@@ -21,7 +23,8 @@ class BinaryOperationNode implements IExpression {
     const leftValue = this.left.eval();
     const rightValue = this.right.eval();
 
-    switch (this.operator) {
+    debugger;
+    switch (this.operation) {
       case '+':
         return leftValue + rightValue;
       case '-':
@@ -31,7 +34,7 @@ class BinaryOperationNode implements IExpression {
       case '/':
         return leftValue / rightValue;
       default:
-        throw new Error(`Unknown operator: ${this.operator}`);
+        throw new Error(`Unknown binary operation: ${this.operation}`);
     }
   }
 }
@@ -42,7 +45,7 @@ export class Parser {
   private inputTokens: string[] = [];
   private inputIndex = 0;
 
-  private eat(token: string, silent: boolean = false): boolean {
+  private consume(token: string, silent: boolean = false): boolean {
     if (this.currentToken === token || silent) {
       this.inputIndex++;
       this.currentToken = this.inputTokens[this.inputIndex];
@@ -56,12 +59,12 @@ export class Parser {
       throw new Error('Unexpected end of input');
     }
 
-    if (this.isNumber(this.currentToken)) {
+    if (isNumericChar(this.currentToken)) {
       return this.number();
     } else if (this.currentToken[0] === '(') {
-      this.eat('(', true);
+      this.consume('(', true);
       const expression = this.expression();
-      this.eat(')', true);
+      this.consume(')', true);
       return expression;
     }
 
@@ -70,11 +73,11 @@ export class Parser {
 
   private number(): IExpression {
     const numbers: string[] = [];
-    while (this.isNumber(this.currentToken)) {
+    while (!isNull(this.currentToken) && isNumericChar(this.currentToken)) {
       numbers.push(this.currentToken);
-      this.eat(this.currentToken);
+      this.consume(this.currentToken);
     }
-    return new NumberNode(Number(numbers.join('')));
+    return new NumberExpression(Number(numbers.join('')));
   }
 
   private term(): IExpression {
@@ -82,8 +85,8 @@ export class Parser {
 
     while (this.currentToken === '*' || this.currentToken === '/') {
       const operator = this.currentToken;
-      this.eat(operator);
-      expression = new BinaryOperationNode(expression, operator, this.factor());
+      this.consume(operator);
+      expression = new BinaryExpression(expression, operator, this.factor());
     }
 
     return expression;
@@ -94,9 +97,9 @@ export class Parser {
 
     while (this.currentToken === '+' || this.currentToken === '-') {
       const operator = this.currentToken;
-      this.eat(operator);
+      this.consume(operator);
       const right = this.term();
-      expression = new BinaryOperationNode(expression, operator, right);
+      expression = new BinaryExpression(expression, operator, right);
     }
 
     return expression;
@@ -108,12 +111,5 @@ export class Parser {
     this.inputIndex = 0;
     this.currentToken = this.inputTokens.length > 0 ? this.inputTokens[0] : null;
     return this.expression();
-  }
-
-  private isNumber(token: string | null): boolean {
-    if (token === null) {
-      return false;
-    }
-    return !isNaN(Number(token));
   }
 }

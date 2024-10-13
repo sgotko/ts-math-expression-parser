@@ -8,6 +8,10 @@
     "outDir": "dist",
     "sourceMap": true,
     "rootDir": ".",
+    "strict": true,
+    "strictNullChecks": true,
+    "noEmit": true,
+    "emitDeclarationOnly": true,
     "allowImportingTsExtensions": true
   },
   "include": ["src/**/*.ts", "test/**/*.ts"]

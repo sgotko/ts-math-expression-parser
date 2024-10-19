@@ -11,6 +11,7 @@ describe('Expression parser test', () => {
 
   it('Parse add expression', () => {
     const expression = parser.parse('123 + 2000');
+    console.log(expression);
     assert.Should().equal(2123, expression.eval());
   });
 

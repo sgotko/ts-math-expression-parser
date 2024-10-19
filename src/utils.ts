@@ -1,5 +1,5 @@
 export const isNumber = (value: unknown) => {
-  return typeof value === 'number' && !isNaN(Number(value));
+  return typeof value === 'number' && !isNaN(value);
 };
 
 export const isNull = (value: unknown) => {
@@ -7,7 +7,7 @@ export const isNull = (value: unknown) => {
 };
 
 export const isUndefined = (value: unknown) => {
-  return typeof value === 'undefined' && value === undefined;
+  return typeof value === 'undefined';
 };
 
 export const isNumericChar = (value: unknown) => {

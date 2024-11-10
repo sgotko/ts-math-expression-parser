@@ -2,10 +2,11 @@ import { isNull, isNumericChar } from './utils.js';
 
 /*
  expression   ::= term (('+' | '-') term)* ;
- term         ::= factor (('*' | '/') factor)* ;
+ term         ::= exponent (('*' | '/') exponent)* ;
+ exponent     ::= factor '^' number;
  factor       ::= number | '(' expression ')' ;
  number       ::= digit+ ;
- digit        ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9' ;
+ digit        ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
  */
 
 interface IExpression {
@@ -41,6 +42,8 @@ class BinaryExpression implements IExpression {
         return leftValue * rightValue;
       case '/':
         return leftValue / rightValue;
+      case '^':
+        return Math.pow(leftValue, rightValue);
       default:
         throw new Error(`Unknown binary operation: ${this.operation}`);
     }
@@ -89,9 +92,21 @@ export class Parser {
   }
 
   private term(): IExpression {
-    let expression = this.factor();
+    let expression = this.exponent();
 
     while (this.currentToken === '*' || this.currentToken === '/') {
+      const operator = this.currentToken;
+      this.consume(operator);
+      expression = new BinaryExpression(expression, operator, this.exponent());
+    }
+
+    return expression;
+  }
+
+  private exponent(): IExpression {
+    let expression = this.factor();
+
+    while (this.currentToken === '^') {
       const operator = this.currentToken;
       this.consume(operator);
       expression = new BinaryExpression(expression, operator, this.factor());

@@ -6,32 +6,46 @@ const parser = new Parser();
 describe('Expression parser test', () => {
   it('Parse number expression', () => {
     const expression = parser.parse('10');
-    assert.Should().equal(10, expression.eval());
+    assert.Should().equal(expression.eval(), 10);
   });
 
   it('Parse add expression', () => {
     const expression = parser.parse('123 + 2000');
-    console.log(expression);
-    assert.Should().equal(2123, expression.eval());
+    assert.Should().equal(expression.eval(), 2123);
   });
 
   it('Parse sub expression', () => {
     const expression = parser.parse('123 - 2000');
-    assert.Should().equal(-1877, expression.eval());
+    assert.Should().equal(expression.eval(), -1877);
   });
 
   it('Parse mul expression', () => {
     const expression = parser.parse('123 * 2000');
-    assert.Should().equal(246000, expression.eval());
+    assert.Should().equal(expression.eval(), 246000);
+  });
+
+  it('Parse complex mul expression', () => {
+    const expression = parser.parse('2 * 4 + 10 * 2');
+    assert.Should().equal(expression.eval(), 2);
   });
 
   it('Parse div expression', () => {
     const expression = parser.parse('2222/11');
-    assert.Should().equal(202, expression.eval());
+    assert.Should().equal(expression.eval(), 202);
   });
 
   it('Parse expression with braces', () => {
     const expression = parser.parse('2 * (10 + 3)');
-    assert.Should().equal(26, expression.eval());
+    assert.Should().equal(expression.eval(), 26);
+  });
+
+  it('Parse simple exponent expression', () => {
+    const expression = parser.parse('2 ^ 2');
+    assert.Should().equal(expression.eval(), 4);
+  });
+
+  it('Parse complex exponent expression', () => {
+    const expression = parser.parse('2 ^ 2 + 10 * 2 ^ 2');
+    assert.Should().equal(expression.eval(), 44);
   });
 });

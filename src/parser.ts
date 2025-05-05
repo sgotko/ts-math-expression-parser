@@ -1,9 +1,7 @@
 import { isNull, isNumericChar } from './utils.js';
 
 /*
- expression   ::= term (('+' | '-') term)* ;
- term         ::= exponent (('*' | '/') exponent)* ;
- exponent     ::= factor '^' number;
+ expression   ::= factor (('+' | '-' | '*' | '/' | '^') factor)* ;
  factor       ::= number | '(' expression ')' ;
  number       ::= digit+ ;
  digit        ::= '0' | '1' | '2' | '3' | '4' | '5' | '6' | '7' | '8' | '9';
@@ -16,7 +14,7 @@ interface IExpression {
 class NumberExpression implements IExpression {
   constructor(private value: number) {}
 
-  eval(): number {
+ eval(): number {
     return this.value;
   }
 }
@@ -32,7 +30,6 @@ class BinaryExpression implements IExpression {
     const leftValue = this.left.eval();
     const rightValue = this.right.eval();
 
-    debugger;
     switch (this.operation) {
       case '+':
         return leftValue + rightValue;
@@ -91,37 +88,14 @@ export class Parser {
     return new NumberExpression(Number(numbers.join('')));
   }
 
-  private term(): IExpression {
-    let expression = this.exponent();
-
-    while (this.currentToken === '*' || this.currentToken === '/') {
-      const operator = this.currentToken;
-      this.consume(operator);
-      expression = new BinaryExpression(expression, operator, this.exponent());
-    }
-
-    return expression;
-  }
-
-  private exponent(): IExpression {
+  private expression(): IExpression {
     let expression = this.factor();
 
-    while (this.currentToken === '^') {
+    while (this.currentToken != null
+      && ['+', '-', '*', '/', '^'].includes(this.currentToken)) {
       const operator = this.currentToken;
       this.consume(operator);
-      expression = new BinaryExpression(expression, operator, this.factor());
-    }
-
-    return expression;
-  }
-
-  private expression(): IExpression {
-    let expression = this.term();
-
-    while (this.currentToken === '+' || this.currentToken === '-') {
-      const operator = this.currentToken;
-      this.consume(operator);
-      const right = this.term();
+      const right = this.factor();
       expression = new BinaryExpression(expression, operator, right);
     }
 

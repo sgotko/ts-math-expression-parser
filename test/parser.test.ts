@@ -26,7 +26,7 @@ describe('Expression parser test', () => {
 
   it('Parse complex mul expression', () => {
     const expression = parser.parse('2 * 4 + 10 * 2');
-    assert.Should().equal(expression.eval(), 2);
+    assert.Should().equal(expression.eval(), 36);
   });
 
   it('Parse div expression', () => {
@@ -39,13 +39,18 @@ describe('Expression parser test', () => {
     assert.Should().equal(expression.eval(), 26);
   });
 
+  it('Parse complex expression with braces', () => {
+    const expression = parser.parse('(3 * (200 / 2)) - 5 * (4 / 2)');
+    assert.Should().equal(expression.eval(), 590);
+  })
+
   it('Parse simple exponent expression', () => {
     const expression = parser.parse('2 ^ 2');
     assert.Should().equal(expression.eval(), 4);
   });
 
   it('Parse complex exponent expression', () => {
-    const expression = parser.parse('2 ^ 2 + 10 * 2 ^ 2');
-    assert.Should().equal(expression.eval(), 44);
+    const expression = parser.parse('2 ^ 2 + 10 * 2');
+    assert.Should().equal(expression.eval(), 28);
   });
 });

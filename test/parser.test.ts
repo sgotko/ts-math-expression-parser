@@ -37,6 +37,7 @@ describe('Expression parser test', () => {
   it('Parse expression with braces', () => {
     const expression = parser.parse('2 * (10 + 3)');
     assert.Should().equal(expression.eval(), 26);
+    console.log(expression)
   });
 
   it('Parse complex expression with braces', () => {
@@ -52,5 +53,6 @@ describe('Expression parser test', () => {
   it('Parse complex exponent expression', () => {
     const expression = parser.parse('2 ^ 2 + 10 * 2');
     assert.Should().equal(expression.eval(), 28);
+    console.log(expression)
   });
 });
